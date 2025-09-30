@@ -55,10 +55,10 @@ class MasterMindSolver:
             return
         else:
             m = self.s.model()
-            r = tuple(
+            r = [
                 [m[self.x[i][j]] for j in range(self.colours)].index(True)
                 for i in range(self.code_length)
-            )
+            ]
             return r
 
     def __sym_bool_sum(self, list: Iterable):
