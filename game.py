@@ -1,59 +1,45 @@
-from pegs import CodePeg, KeyPeg
+import random as r
 
 
 class MasterMind:
-    code: tuple[CodePeg, CodePeg, CodePeg, CodePeg]
-    guesses: list[tuple[CodePeg, CodePeg, CodePeg, CodePeg]]
-    results: list[list[KeyPeg]]
+    code_length: int
+    colours: int
+    code: list[int]
+    guesses: list[list[int]]
+    results: list[tuple[int, int]]
+    won: bool
 
-    def __init__(self, code: tuple[int, int, int, int]):
-        self.code = self.__int_to_pegs(code)
+    def __init__(self, code: list[int] = [], code_length=4, colours=6):
+        if code == []:
+            self.code = [r.choice(range(colours)) for _ in range(code_length)]
+        elif len(code) == code_length and all(c in range(colours) for c in code):
+            self.code = code
+        else:
+            raise ValueError("Invalid code provided")
+        self.code_length = code_length
+        self.colours = colours
         self.guesses = []
         self.results = []
+        self.won = False
 
-    def guess(self, input: tuple[CodePeg, CodePeg, CodePeg, CodePeg]) -> list[KeyPeg]:
-        self.guesses.append(input)
-        guess_list = list(input)
-        code_list = list(self.code)
+    def guess(self, input: list[int]) -> tuple[int, int]:
+        if len(input) == self.code_length & all(
+            c in range(self.colours) for c in input
+        ):
+            if input == self.code:
+                self.won = True
+                return (4, 0)
+            self.guesses.append(input)
 
-        result = []
+            black = sum(1 if a == b else 0 for a, b in zip(input, self.code))
+            white = (
+                sum(
+                    min(input.count(c), self.code.count(c)) for c in range(self.colours)
+                )
+                - black
+            )
 
-        # Black pegs
-        for a, b in zip(input, self.code):
-            if a == b:
-                result.append(KeyPeg.BLACK)
-                guess_list.remove(a)
-                code_list.remove(a)
-        if not guess_list:
-            return result
-
-        # White pegs
-        for a in guess_list:
-            if a in code_list:
-                result.append(KeyPeg.WHITE)
-                guess_list.remove(a)
-                code_list.remove(a)
-
-        self.results.append(result)
-        return result
-
-    def guess_int(self, input: tuple[int, int, int, int]) -> tuple[int, int]:
-        result = self.guess(self.__int_to_pegs(input))
-        return (result.count(KeyPeg.BLACK), result.count(KeyPeg.WHITE))
-
-    def __int_to_pegs(
-        self,
-        input: tuple[int, int, int, int],
-    ) -> tuple[CodePeg, CodePeg, CodePeg, CodePeg]:
-        return (
-            CodePeg(input[0]),
-            CodePeg(input[1]),
-            CodePeg(input[2]),
-            CodePeg(input[3]),
-        )
-
-
-if __name__ == "__main__":
-    g = MasterMind((1, 2, 3, 4))
-    print(g.guess_int((1, 1, 1, 1)))
-    print(g.guess_int((2, 1, 1, 1)))
+            self.results.append((black, white))
+            return (black, white)
+        else:
+            raise ValueError("Invalid query")
