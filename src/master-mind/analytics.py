@@ -1,6 +1,6 @@
 from solver import MasterMindSolver
 from game import MasterMind
-from tui import print_game_state
+from game_cli import print_game_state
 from itertools import product
 import json
 from statistics import mean
