@@ -28,7 +28,7 @@ class MasterMind:
         ):
             if input == self.code:
                 self.won = True
-                return (4, 0)
+                return (self.code_length, 0)
             self.guesses.append(input)
 
             black = sum(1 if a == b else 0 for a, b in zip(input, self.code))
@@ -42,4 +42,4 @@ class MasterMind:
             self.results.append((black, white))
             return (black, white)
         else:
-            raise ValueError("Invalid query")
+            raise ValueError(f"Invalid query: {input}")
