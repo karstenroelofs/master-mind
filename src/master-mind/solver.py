@@ -1,4 +1,4 @@
-from z3 import Int, Solver, Ints, Bool, Sum, If
+from z3 import Solver, Bool, Sum, If
 from typing import Iterable
 
 
