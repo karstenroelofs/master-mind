@@ -2,7 +2,7 @@ from solver import MasterMindSolver
 from game import MasterMind
 from tui import print_game_state
 
-n, m = 6, 6
+n, m = 10, 10
 s = MasterMindSolver(n, m)
 g = MasterMind([], n, m)
 
