@@ -23,12 +23,9 @@ class MasterMind:
         self.won = False
 
     def guess(self, input: list[int]) -> tuple[int, int]:
-        if len(input) == self.code_length & all(
+        if len(input) == self.code_length and all(
             c in range(self.colours) for c in input
         ):
-            if input == self.code:
-                self.won = True
-                return (self.code_length, 0)
             self.guesses.append(input)
 
             black = sum(1 if a == b else 0 for a, b in zip(input, self.code))
@@ -40,6 +37,7 @@ class MasterMind:
             )
 
             self.results.append((black, white))
+            self.won = black == self.code_length
             return (black, white)
         else:
             raise ValueError(f"Invalid query: {input}")

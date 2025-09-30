@@ -52,7 +52,7 @@ class MasterMindSolver:
         c = self.s.check()
         if c == "unsat":
             print("Unsat")
-            return
+            raise Exception("Unsat, don't know if / how this is possible")
         else:
             m = self.s.model()
             r = [
