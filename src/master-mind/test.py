@@ -1,6 +1,16 @@
 from solver import MasterMindSolver
+from game import MasterMind
+from tui import print_game_state
 
-s = MasterMindSolver()
+n, m = 6, 6
+s = MasterMindSolver(n, m)
+g = MasterMind([], n, m)
 
-s.add_result((0, 1, 2, 3), (1, 0))
-print(s.get_valid_query())
+while not g.won:
+    q = s.get_valid_query()
+    r = g.guess(q)
+    s.add_constraints(q, r)
+
+print_game_state(g)
+tries = len(g.guesses)
+print(f"Tries: {tries}")
